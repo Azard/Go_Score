@@ -18,12 +18,13 @@ import (
 
 // 文件路径
 const (
-	Path_Favicon       string = "./page/ico/favicon.ico"
-	Path_Login         string = "./page/login.html"
-	Path_Student       string = "./page/student.html"
-	Path_bootstrap_css string = "./page/bootstrap/css/bootstrap.min.css"
-	Path_bootstrap_js  string = "./page/bootstrap/js/bootstrap.min.js"
-	Path_jquery        string = "./page/bootstrap/jquery.min.js"
+	Path_Favicon         string = "./page/ico/favicon.ico"
+	Path_Login           string = "./page/login.html"
+	Path_Student         string = "./page/student.html"
+	Path_Modify_Password string = "./page/modify-password.html"
+	Path_bootstrap_css   string = "./page/bootstrap/css/bootstrap.min.css"
+	Path_bootstrap_js    string = "./page/bootstrap/js/bootstrap.min.js"
+	Path_jquery          string = "./page/bootstrap/jquery.min.js"
 )
 
 // 页面动态数据
@@ -36,6 +37,14 @@ type tmp_Login struct {
 // 用户主页动态数据
 type tmp_Student struct {
 	Name string
+}
+
+// 修改密码动态数据
+type tmp_Modify_Password struct {
+	Name           string
+	Not_same       bool
+	Not_form       bool
+	Modify_success bool
 }
 
 type Session_struct struct {
@@ -105,6 +114,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 // 登出操作的handle函数
 func logout(w http.ResponseWriter, r *http.Request) {
+	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
 	session_manager.GetSession(w, r).Value = nil
 	http.Redirect(w, r, "/", http.StatusFound)
 	return
@@ -123,6 +133,54 @@ func student(w http.ResponseWriter, r *http.Request) {
 	p := &tmp_Student{Name: client_session.Name}
 	t, _ := template.ParseFiles(Path_Student)
 	t.Execute(w, p)
+}
+
+// 修改密码handle函数
+func modify_password(w http.ResponseWriter, r *http.Request) {
+	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
+	// session没有记录，拒绝服务
+	if session_manager.GetSession(w, r).Value == nil {
+		logger.Println("No session, refuse")
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+
+	// GET方法
+	if r.Method == "GET" {
+		client_session := session_manager.GetSession(w, r).Value.(Session_struct)
+		p := &tmp_Modify_Password{Name: client_session.Name, Not_same: false, Not_form: false, Modify_success: false}
+		t, _ := template.ParseFiles(Path_Modify_Password)
+		t.Execute(w, p)
+
+		// POST方法
+	} else if r.Method == "POST" {
+		r.ParseForm()
+		client_session := session_manager.GetSession(w, r).Value.(Session_struct)
+		tempPassword := r.Form["password"][0]
+		tempRepeat := r.Form["repeat_password"][0]
+		logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\nPassword: %s\nRepeat  : %s\n=========================\n", r.URL, r.Method, r.RemoteAddr, r.Form["password"], r.Form["repeat_password"])
+
+		// 两次密码不一致
+		if tempPassword != tempRepeat {
+			p := &tmp_Modify_Password{Name: client_session.Name, Not_same: true, Not_form: false, Modify_success: false}
+			t, _ := template.ParseFiles(Path_Modify_Password)
+			t.Execute(w, p)
+
+			// 密码不符合规范
+		} else if len(tempPassword) < 4 || len(tempPassword) > 14 {
+			p := &tmp_Modify_Password{Name: client_session.Name, Not_same: false, Not_form: true, Modify_success: false}
+			t, _ := template.ParseFiles(Path_Modify_Password)
+			t.Execute(w, p)
+
+			// 可以修改密码
+		} else {
+			_, err = db.Exec("update user set password = '" + tempPassword + "' where name= '" + client_session.Name + "'")
+			checkErr(err)
+			p := &tmp_Modify_Password{Name: client_session.Name, Not_same: false, Not_form: false, Modify_success: true}
+			t, _ := template.ParseFiles(Path_Modify_Password)
+			t.Execute(w, p)
+		}
+	}
 }
 
 func admin(w http.ResponseWriter, r *http.Request) {
@@ -174,6 +232,7 @@ func main() {
 	http.HandleFunc("/student", student)
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/admin", admin)
+	http.HandleFunc("/modify-password", modify_password)
 
 	serveSingleFile("/favicon.ico", Path_Favicon)
 	serveSingleFile("/bootstrap/css/bootstrap.min.css", Path_bootstrap_css)
