@@ -1,12 +1,59 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title></title>
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"></link>
+<script src="bootstrap/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<title>Login</title>
 </head>
+
+
 <body>
-<form action="/" method="post">
-    用户名:<input type="text" name="username">
-    密码:<input type="password" name="password">
-    <input type="submit" value="登陆">
-</form>
+	<div class=container>
+		<h1 class="page-header">SE106 Grade System</h1>
+		
+		<div class="well well-lg row center-block" style="max-width:400px">
+			<form class="form-signin" method="post" style="max-width:330px">
+		        <h2 class="form-signin-heading">Please login in</h2>
+
+		        {{if .Id_not_exist}}
+			        <div class="has-error">
+			        <input name="name" type="text" class="form-control" placeholder="Student Number not exist" required="true">
+			        </div>
+			    {{else}}
+		        	<input name="name" type="text" class="form-control" placeholder="Student Number" required="true">
+				{{end}}
+
+				{{if .Password_error}}
+			        <div class="has-error">
+			        <input name="password" type="password" class="form-control" placeholder="Password Error" required="true">
+			        </div>
+			    {{else}}
+			    	<input name="password" type="password" class="form-control" placeholder="Password" required="true">
+			   	{{end}}
+
+		        <br/>
+		        <label>
+		        	<input type="checkbox"> Remember me
+		        </label>
+		        <br/>
+		        <br/>
+		        
+		        <div class="form-group">
+					<button type="submit" class="btn btn-primary btn-block">Submit</button>
+				</div>
+			</form>
+		</div>
+		<hr/>
+		<footer class="footer"><p>@Azard 2014<br/>Any problem about this system, contact email:<br/>azardf4yy@gmail.com</p></footer>
+	</div>	
+	{{if .Id_not_exist}}
+		<script>alert("Student ID not exist")</script>
+	{{end}}
+	{{if .Password_error}}
+		<script>alert("Password error")</script>
+	{{end}}
 </body>
 </html>
