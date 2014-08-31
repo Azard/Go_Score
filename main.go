@@ -33,7 +33,8 @@ type tmp_Login struct {
 	Password_error bool
 }
 
-type Page struct {
+// 用户主页动态数据
+type tmp_Student struct {
 	Name string
 }
 
@@ -102,19 +103,26 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// 登出操作的handle函数
+func logout(w http.ResponseWriter, r *http.Request) {
+	session_manager.GetSession(w, r).Value = nil
+	http.Redirect(w, r, "/", http.StatusFound)
+	return
+}
+
 // 学生主页面操作的handle函数
 func student(w http.ResponseWriter, r *http.Request) {
 	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
+	// session没有记录，拒绝服务
 	if session_manager.GetSession(w, r).Value == nil {
-		// TODO 拒绝服务
-		fmt.Println("拒绝服务")
+		logger.Println("No session, refuse")
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 	client_session := session_manager.GetSession(w, r).Value.(Session_struct)
-	p := &Page{Name: client_session.Name}
+	p := &tmp_Student{Name: client_session.Name}
 	t, _ := template.ParseFiles(Path_Student)
 	t.Execute(w, p)
-
 }
 
 func admin(w http.ResponseWriter, r *http.Request) {
@@ -153,9 +161,9 @@ func main() {
 
 	fmt.Println("HTTP Server Start\n=========================")
 
-	// session_manager.OnStart(func(session *session.Session) {
-	// 	println("started new session")
-	// })
+	session_manager.OnStart(func(session *session.Session) {
+		println("started new session")
+	})
 	// session_manager.OnEnd(func(session *session.Session) {
 	// 	println("abandon")
 	// })
@@ -164,6 +172,7 @@ func main() {
 
 	http.HandleFunc("/", login)
 	http.HandleFunc("/student", student)
+	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/admin", admin)
 
 	serveSingleFile("/favicon.ico", Path_Favicon)
