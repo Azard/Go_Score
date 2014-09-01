@@ -6,7 +6,9 @@ TODO:
 package main
 
 import (
+	"crypto/md5"
 	"database/sql"
+	"encoding/hex"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"html/template"
@@ -71,14 +73,20 @@ func checkErr(err error) {
 	}
 }
 
+func getMd5String(s string) string {
+	h := md5.New()
+	h.Write([]byte(s))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
 // 登陆操作的handle函数
 func login(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		// 登陆页面的POST方法
 		r.ParseForm()
 		tempName := r.Form["name"][0]
-		tempPassword := r.Form["password"][0]
-		logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\name: %s\npassword: %s\n=========================\n", r.URL, r.Method, r.RemoteAddr, r.Form["name"], r.Form["password"])
+		tempPassword := getMd5String(r.Form["password"][0])
+		logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\nname: %s\npassword: %s\n=========================\n", r.URL, r.Method, r.RemoteAddr, r.Form["name"], getMd5String(r.Form["password"][0]))
 
 		//验证用户名密码
 		row := db.QueryRow("select * from user where name='" + tempName + "'")
@@ -158,7 +166,7 @@ func modify_password(w http.ResponseWriter, r *http.Request) {
 		client_session := session_manager.GetSession(w, r).Value.(Session_struct)
 		tempPassword := r.Form["password"][0]
 		tempRepeat := r.Form["repeat_password"][0]
-		logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\nPassword: %s\nRepeat  : %s\n=========================\n", r.URL, r.Method, r.RemoteAddr, r.Form["password"], r.Form["repeat_password"])
+		logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\nPassword: %s\nRepeat  : %s\n=========================\n", r.URL, r.Method, r.RemoteAddr, getMd5String(r.Form["password"][0]), getMd5String(r.Form["repeat_password"][0]))
 
 		// 两次密码不一致
 		if tempPassword != tempRepeat {
@@ -174,6 +182,8 @@ func modify_password(w http.ResponseWriter, r *http.Request) {
 
 			// 可以修改密码
 		} else {
+			tempPassword = (getMd5String(tempPassword))
+			fmt.Println(tempPassword)
 			_, err = db.Exec("update user set password = '" + tempPassword + "' where name= '" + client_session.Name + "'")
 			checkErr(err)
 			p := &tmp_Modify_Password{Name: client_session.Name, Not_same: false, Not_form: false, Modify_success: true}
