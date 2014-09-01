@@ -24,9 +24,11 @@ const (
 	Path_Login           string = "./page/login.html"
 	Path_Student         string = "./page/student.html"
 	Path_Modify_Password string = "./page/modify-password.html"
-	Path_bootstrap_css   string = "./page/bootstrap/css/bootstrap.min.css"
-	Path_bootstrap_js    string = "./page/bootstrap/js/bootstrap.min.js"
-	Path_jquery          string = "./page/bootstrap/jquery.min.js"
+	Path_Admin           string = "./page/admin.html"
+
+	Path_bootstrap_css string = "./page/bootstrap/css/bootstrap.min.css"
+	Path_bootstrap_js  string = "./page/bootstrap/js/bootstrap.min.js"
+	Path_jquery        string = "./page/bootstrap/jquery.min.js"
 )
 
 // 页面动态数据
@@ -88,8 +90,20 @@ func login(w http.ResponseWriter, r *http.Request) {
 		tempPassword := getMd5String(r.Form["password"][0])
 		logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\nname: %s\npassword: %s\n=========================\n", r.URL, r.Method, r.RemoteAddr, r.Form["name"], getMd5String(r.Form["password"][0]))
 
-		//验证用户名密码
-		row := db.QueryRow("select * from user where name='" + tempName + "'")
+		// 验证是否是管理员
+		row := db.QueryRow("select * from admin where aname = '" + tempName + "'")
+		var aname string = ""
+		var apassword string
+		row.Scan(&aname, &apassword)
+		if aname != "" && tempPassword == apassword {
+			session_manager.GetSession(w, r).Value = Session_struct{Name: tempName}
+			http.Redirect(w, r, "/admin", http.StatusFound)
+			return //http.Redirect会执行后面的代码，return保证安全
+		}
+
+		// 普通用户
+		// 验证用户名密码
+		row = db.QueryRow("select * from user where name='" + tempName + "'")
 		var id int
 		var username string
 		var password string
@@ -195,6 +209,12 @@ func modify_password(w http.ResponseWriter, r *http.Request) {
 
 func admin(w http.ResponseWriter, r *http.Request) {
 	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
+	// session没有记录，拒绝服务
+	// TODO 进入数据库验证
+	// TODO 或者session加入admin flag  推荐！
+
+	t, _ := template.ParseFiles(Path_Admin)
+	t.Execute(w, nil)
 }
 
 func main() {
