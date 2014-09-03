@@ -16,3 +16,643 @@ method: GET
 Addr: [::1]:14006
 =========================
 2014/09/03 16:13:50 Expired session(id:87cc0a01f55d01a41cafe17b33ded161)
+2014/09/03 16:23:31 
+URL: /
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:23:34 
+URL: /
+method: POST
+Addr: [::1]:14394
+name: [azard5]
+password: bcab548eaf2d5f2cd3d41e07a3e679d5
+=========================
+2014/09/03 16:23:34 Admin Login, ID:azard5
+2014/09/03 16:23:34 
+URL: /admin
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:23:35 
+URL: /admin-grade
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:23:36 
+URL: /admin-grade
+method: POST
+Addr: [::1]:14394
+=========================
+2014/09/03 16:23:41 
+URL: /admin
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:23:43 
+URL: /admin-grade
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:23:43 
+URL: /admin
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:23:45 
+URL: /admin-grade
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:23:46 
+URL: /admin
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:24:02 
+URL: /logout
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:24:02 Logout, ID:azard5
+2014/09/03 16:24:02 
+URL: /
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:24:05 
+URL: /
+method: POST
+Addr: [::1]:14394
+name: [admin]
+password: 21232f297a57a5a743894a0e4a801fc3
+=========================
+2014/09/03 16:24:05 User Login, ID:admin
+2014/09/03 16:24:05 
+URL: /student
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:24:05 Student search grade, ID: admin
+2014/09/03 16:25:02 
+URL: /modify-password
+method: GET
+Addr: [::1]:14394
+=========================
+2014/09/03 16:25:05 
+URL: /modify-password
+method: POST
+Addr: [::1]:14394
+=========================
+2014/09/03 16:25:05 
+URL: /modify-password
+method: POST
+Addr: [::1]:14394
+Password: 21232f297a57a5a743894a0e4a801fc3
+Repeat  : 21232f297a57a5a743894a0e4a801fc3
+=========================
+2014/09/03 16:25:05 Student modify password success, ID: admin
+2014/09/03 16:26:30 
+URL: /
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:26:33 
+URL: /
+method: POST
+Addr: [::1]:14491
+name: [azard5]
+password: bcab548eaf2d5f2cd3d41e07a3e679d5
+=========================
+2014/09/03 16:26:33 Admin Login, ID:azard5
+2014/09/03 16:26:33 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:26:34 
+URL: /admin-grade
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:26:35 
+URL: /admin-grade
+method: POST
+Addr: [::1]:14491
+=========================
+2014/09/03 16:26:48 
+URL: /admin-grade
+method: POST
+Addr: [::1]:14491
+=========================
+2014/09/03 16:27:00 
+URL: /admin-grade
+method: POST
+Addr: [::1]:14491
+=========================
+2014/09/03 16:27:08 
+URL: /admin-grade
+method: POST
+Addr: [::1]:14491
+=========================
+2014/09/03 16:31:46 
+URL: /logout
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:31:46 Logout, ID:azard5
+2014/09/03 16:31:46 
+URL: /
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:31:49 
+URL: /
+method: POST
+Addr: [::1]:14491
+name: [admin]
+password: 21232f297a57a5a743894a0e4a801fc3
+=========================
+2014/09/03 16:31:49 User Login, ID:admin
+2014/09/03 16:31:49 
+URL: /student
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:31:49 Student search grade, ID: admin
+2014/09/03 16:31:59 
+URL: /logout
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:31:59 Logout, ID:admin
+2014/09/03 16:31:59 
+URL: /
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:32:03 
+URL: /
+method: POST
+Addr: [::1]:14491
+name: [azard5]
+password: bcab548eaf2d5f2cd3d41e07a3e679d5
+=========================
+2014/09/03 16:32:03 Admin Login, ID:azard5
+2014/09/03 16:32:03 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:33:11 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:33:12 
+URL: /admin-grade
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:33:13 
+URL: /admin-student
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:33:13 
+URL: /admin-grade
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:33:14 
+URL: /admin-grade
+method: POST
+Addr: [::1]:14491
+=========================
+2014/09/03 16:33:43 
+URL: /admin-grade
+method: POST
+Addr: [::1]:14491
+=========================
+2014/09/03 16:33:57 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:34:00 
+URL: /admin-student
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:34:01 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:36:05 
+URL: /logout
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:36:05 Logout, ID:azard5
+2014/09/03 16:36:05 
+URL: /
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:36:09 
+URL: /
+method: POST
+Addr: [::1]:14491
+name: [azard5]
+password: bcab548eaf2d5f2cd3d41e07a3e679d5
+=========================
+2014/09/03 16:36:09 Admin Login, ID:azard5
+2014/09/03 16:36:09 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:38:55 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:38:55 
+URL: /admin-student
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:38:56 
+URL: /admin-grade
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:38:56 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:38:57 
+URL: /admin-grade
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:39:36 
+URL: /admin-grade
+method: POST
+Addr: [::1]:14491
+=========================
+2014/09/03 16:39:39 
+URL: /admin-grade
+method: POST
+Addr: [::1]:14491
+=========================
+2014/09/03 16:39:45 
+URL: /admin-grade
+method: POST
+Addr: [::1]:14491
+=========================
+2014/09/03 16:40:00 
+URL: /admin-grade
+method: POST
+Addr: [::1]:14491
+=========================
+2014/09/03 16:40:06 
+URL: /logout
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:40:06 Logout, ID:azard5
+2014/09/03 16:40:06 
+URL: /
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:43:51 
+URL: /
+method: POST
+Addr: [::1]:14491
+name: [se106_admin1]
+password: 5dbb13a93c98427ec4d8eaf3ae94939e
+=========================
+2014/09/03 16:43:51 Admin Login, ID:se106_admin1
+2014/09/03 16:43:51 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:43:54 
+URL: /logout
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:43:54 Logout, ID:se106_admin1
+2014/09/03 16:43:54 
+URL: /
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:43:56 
+URL: /
+method: POST
+Addr: [::1]:14491
+name: [se106_admin1]
+password: 5dbb13a93c98427ec4d8eaf3ae94939e
+=========================
+2014/09/03 16:43:56 Admin Login, ID:se106_admin1
+2014/09/03 16:43:56 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:44:00 
+URL: /logout
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:44:00 Logout, ID:se106_admin1
+2014/09/03 16:44:00 
+URL: /
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:44:02 
+URL: /
+method: POST
+Addr: [::1]:14491
+name: [se106_admin1]
+password: 5dbb13a93c98427ec4d8eaf3ae94939e
+=========================
+2014/09/03 16:44:02 Admin Login, ID:se106_admin1
+2014/09/03 16:44:02 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:44:21 
+URL: /logout
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:44:21 Logout, ID:se106_admin1
+2014/09/03 16:44:21 
+URL: /
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:44:25 
+URL: /
+method: POST
+Addr: [::1]:14491
+name: [se106_admin1]
+password: 5dbb13a93c98427ec4d8eaf3ae94939e
+=========================
+2014/09/03 16:44:25 Admin Login, ID:se106_admin1
+2014/09/03 16:44:25 
+URL: /admin
+method: GET
+Addr: [::1]:14491
+=========================
+2014/09/03 16:46:59 
+URL: /
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:47:02 
+URL: /
+method: POST
+Addr: [::1]:15259
+name: [azard5]
+password: bcab548eaf2d5f2cd3d41e07a3e679d5
+=========================
+2014/09/03 16:47:02 Admin Login, ID:azard5
+2014/09/03 16:47:02 
+URL: /admin
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:47:03 
+URL: /admin-grade
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:47:04 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:47:07 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:47:18 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:47:40 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:47:43 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:47:45 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:47:46 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:47:50 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:47:51 
+URL: /admin-student
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:01 
+URL: /admin-student
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:06 
+URL: /admin-student
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:11 
+URL: /admin-student
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:16 
+URL: /logout
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:16 Logout, ID:azard5
+2014/09/03 16:48:16 
+URL: /
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:26 
+URL: /
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:33 
+URL: /
+method: POST
+Addr: [::1]:15259
+name: [se106_admin1]
+password: 0eed2da641cab0b4cba3b24c6eda60b5
+=========================
+2014/09/03 16:48:33 User Login fail, ID not exist
+2014/09/03 16:48:41 
+URL: /
+method: POST
+Addr: [::1]:15259
+name: [se106_admin1]
+password: 5dbb13a93c98427ec4d8eaf3ae94939e
+=========================
+2014/09/03 16:48:41 Admin Login, ID:se106_admin1
+2014/09/03 16:48:41 
+URL: /admin
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:42 
+URL: /admin-grade
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:43 
+URL: /admin
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:43 
+URL: /admin-grade
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:44 
+URL: /admin-student
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:44 
+URL: /admin-grade
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:44 
+URL: /admin
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:45 
+URL: /admin-grade
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:46 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:49 
+URL: /admin-student
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:49 
+URL: /admin-grade
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:51 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:54 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:56 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:56 
+URL: /admin-grade
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:48:58 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:49:02 
+URL: /admin-grade
+method: POST
+Addr: [::1]:15259
+=========================
+2014/09/03 16:49:03 
+URL: /logout
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:49:03 Logout, ID:se106_admin1
+2014/09/03 16:49:03 
+URL: /
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:49:05 
+URL: /
+method: POST
+Addr: [::1]:15259
+name: [admin]
+password: 21232f297a57a5a743894a0e4a801fc3
+=========================
+2014/09/03 16:49:05 User Login, ID:admin
+2014/09/03 16:49:05 
+URL: /student
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:49:05 Student search grade, ID: admin
+2014/09/03 16:49:08 
+URL: /student
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:49:08 Student search grade, ID: admin
+2014/09/03 16:49:11 
+URL: /logout
+method: GET
+Addr: [::1]:15259
+=========================
+2014/09/03 16:49:11 Logout, ID:admin
+2014/09/03 16:49:11 
+URL: /
+method: GET
+Addr: [::1]:15259
+=========================

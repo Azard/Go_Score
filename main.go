@@ -268,7 +268,7 @@ func modify_password(w http.ResponseWriter, r *http.Request) {
 			p := &tmp_Modify_Password{Name: client_session.Name, Not_same: false, Not_form: false, Modify_success: true}
 			t, _ := template.ParseFiles(Path_Modify_Password)
 			t.Execute(w, p)
-			logger.Printf("Student modify password success, ID: %s\n", client_session.Name)
+			logger.Printf("Student modify password success, ID: %s, Password: \n", client_session.Name, tempPassword)
 		}
 	}
 }
