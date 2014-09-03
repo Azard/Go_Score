@@ -145,7 +145,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		row.Scan(&aname, &apassword)
 		if aname != "" && tempPassword == apassword {
 			session_manager.GetSession(w, r).Value = Session_struct{Name: tempName, Admin_flag: true}
-			http.Redirect(w, r, "/admin", http.StatusFound)
+			http.Redirect(w, r, "admin", http.StatusFound)
 			logger.Printf("Admin Login, ID:%s\n", tempName)
 			return //http.Redirect会执行后面的代码，return保证安全
 		}
@@ -161,7 +161,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		if id != 0 { //搜索到用户名
 			if tempPassword == password { //登陆成功
 				session_manager.GetSession(w, r).Value = Session_struct{Name: tempName, Admin_flag: false}
-				http.Redirect(w, r, "/student", http.StatusFound)
+				http.Redirect(w, r, "student", http.StatusFound)
 				logger.Printf("User Login, ID:%s\n", tempName)
 				return //http.Redirect会执行后面的代码，return保证安全
 			} else { //密码错误，登陆失败
@@ -191,7 +191,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
 	logger.Printf("Logout, ID:%s\n", session_manager.GetSession(w, r).Value.(Session_struct).Name)
 	session_manager.GetSession(w, r).Value = nil
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, "../", http.StatusFound)
 	return
 }
 
@@ -201,7 +201,7 @@ func student(w http.ResponseWriter, r *http.Request) {
 	// session不是student，拒绝服务
 	if session_manager.GetSession(w, r).Value == nil || session_manager.GetSession(w, r).Value.(Session_struct).Admin_flag != false {
 		logger.Println("session wrong, refuse")
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "../", http.StatusFound)
 		return
 	}
 	client_session := session_manager.GetSession(w, r).Value.(Session_struct)
@@ -225,7 +225,7 @@ func modify_password(w http.ResponseWriter, r *http.Request) {
 	// session不是student，拒绝服务
 	if session_manager.GetSession(w, r).Value == nil || session_manager.GetSession(w, r).Value.(Session_struct).Admin_flag != false {
 		logger.Println("session wrong, refuse")
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "../", http.StatusFound)
 		return
 	}
 
@@ -278,7 +278,7 @@ func admin(w http.ResponseWriter, r *http.Request) {
 	// session没有记录，拒绝服务
 	if session_manager.GetSession(w, r).Value == nil || session_manager.GetSession(w, r).Value.(Session_struct).Admin_flag != true {
 		logger.Println("session wrong, refuse")
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "../", http.StatusFound)
 		return
 	}
 
@@ -320,7 +320,7 @@ func admin_student(w http.ResponseWriter, r *http.Request) {
 	// session没有记录，拒绝服务
 	if session_manager.GetSession(w, r).Value == nil || session_manager.GetSession(w, r).Value.(Session_struct).Admin_flag != true {
 		logger.Println("session wrong, refuse")
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "../", http.StatusFound)
 		return
 	}
 
@@ -363,7 +363,7 @@ func admin_grade(w http.ResponseWriter, r *http.Request) {
 	// session没有记录，拒绝服务
 	if session_manager.GetSession(w, r).Value == nil || session_manager.GetSession(w, r).Value.(Session_struct).Admin_flag != true {
 		logger.Println("session wrong, refuse")
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "../", http.StatusFound)
 		return
 	}
 	client_session := session_manager.GetSession(w, r).Value.(Session_struct)
