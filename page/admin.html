@@ -18,7 +18,8 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="/admin">Home</a></li>
+					<li class="active"><a href="/admin">Project</a></li>
+					<li><a href="#">Grade</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="/logout">Logout</a></li>
@@ -28,8 +29,54 @@
 	</div>
 
 
+	<div class=container>
+		<h2 class="page-header">Project List</h1>
+
+		<div class="col-lg-6">
+			<form class="form-inline center-block" method="post">
+				<label>Project name</label>
+				<input name="add_pname" type="text" class="form-control" placeholder="name" required="true"> <br/>
+				<label>Full Grade&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+				<input name="add_full_grade" type="text" class="form-control" placeholder="full grade" required="true">
+				<br/>
+				<br/>
+				<button type="submit" class="btn btn-primary btn-block" style="max-width:150px">Add</button>
+			</form>
+		</div>
+
+		<div class="col-lg-6">
+			<form class="form-inline center-block" method="post">
+				<label>Delete number</label>
+				<input name="delete_pid" type="text" class="form-control" placeholder="number" required="true">
+				<br/><br/><br/><br/>
+				<button type="submit" class="btn btn-danger btn-block" style="max-width:150px">Delete</button>
+			</form>
+		</div>
 
 
-<p>hello, {{.Name}}</p>
+		<br/>
+
+		<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<th>Full Grade</th>
+		    </tr>
+		</thead>
+		<tbody>
+		{{with .Find_Project}}
+			{{range .}}
+			<tr>
+				<td>{{.Pid}}</td>
+				<td>{{.Pname}}</td>
+				<td>{{.Full_grade}}</td>
+		    </tr>
+		    {{end}}
+		{{end}}
+		</tbody>
+
+	</div>
+
 </body>
 </html>

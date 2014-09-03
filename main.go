@@ -51,8 +51,20 @@ type tmp_Modify_Password struct {
 	Modify_success bool
 }
 
+type temp_Admin struct {
+	Name         string
+	Find_Project []Project
+}
+
+type Project struct {
+	Pid        int
+	Pname      string
+	Full_grade int
+}
+
 type Session_struct struct {
-	Name string
+	Name       string
+	Admin_flag bool
 }
 
 // log管理器和session管理器
@@ -96,7 +108,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		var apassword string
 		row.Scan(&aname, &apassword)
 		if aname != "" && tempPassword == apassword {
-			session_manager.GetSession(w, r).Value = Session_struct{Name: tempName}
+			session_manager.GetSession(w, r).Value = Session_struct{Name: tempName, Admin_flag: true}
 			http.Redirect(w, r, "/admin", http.StatusFound)
 			return //http.Redirect会执行后面的代码，return保证安全
 		}
@@ -111,7 +123,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 		if id != 0 { //搜索到用户名
 			if tempPassword == password { //登陆成功
-				session_manager.GetSession(w, r).Value = Session_struct{Name: tempName}
+				session_manager.GetSession(w, r).Value = Session_struct{Name: tempName, Admin_flag: false}
 				http.Redirect(w, r, "/student", http.StatusFound)
 				return //http.Redirect会执行后面的代码，return保证安全
 			} else { //密码错误，登陆失败
@@ -145,9 +157,9 @@ func logout(w http.ResponseWriter, r *http.Request) {
 // 学生主页面操作的handle函数
 func student(w http.ResponseWriter, r *http.Request) {
 	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
-	// session没有记录，拒绝服务
-	if session_manager.GetSession(w, r).Value == nil {
-		logger.Println("No session, refuse")
+	// session不是student，拒绝服务
+	if session_manager.GetSession(w, r).Value == nil || session_manager.GetSession(w, r).Value.(Session_struct).Admin_flag != false {
+		logger.Println("session wrong, refuse")
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -160,9 +172,9 @@ func student(w http.ResponseWriter, r *http.Request) {
 // 修改密码handle函数
 func modify_password(w http.ResponseWriter, r *http.Request) {
 	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
-	// session没有记录，拒绝服务
-	if session_manager.GetSession(w, r).Value == nil {
-		logger.Println("No session, refuse")
+	// session不是student，拒绝服务
+	if session_manager.GetSession(w, r).Value == nil || session_manager.GetSession(w, r).Value.(Session_struct).Admin_flag != false {
+		logger.Println("session wrong, refuse")
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -210,11 +222,54 @@ func modify_password(w http.ResponseWriter, r *http.Request) {
 func admin(w http.ResponseWriter, r *http.Request) {
 	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
 	// session没有记录，拒绝服务
-	// TODO 进入数据库验证
-	// TODO 或者session加入admin flag  推荐！
+	if session_manager.GetSession(w, r).Value == nil || session_manager.GetSession(w, r).Value.(Session_struct).Admin_flag != true {
+		logger.Println("session wrong, refuse")
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
 
-	t, _ := template.ParseFiles(Path_Admin)
-	t.Execute(w, nil)
+	// GET方法
+	if r.Method == "GET" {
+		rows, err := db.Query("select * from project")
+		checkErr(err)
+		var rows_project []Project
+		for i := 0; rows.Next(); i++ {
+			rows_project = append(rows_project, Project{0, "", 0})
+			rows.Scan(&rows_project[i].Pid, &rows_project[i].Pname, &rows_project[i].Full_grade)
+			fmt.Println(rows_project[i].Pid, rows_project[i].Pname, rows_project[i].Full_grade)
+		}
+		p := &temp_Admin{Name: session_manager.GetSession(w, r).Value.(Session_struct).Name, Find_Project: rows_project}
+		t, _ := template.ParseFiles(Path_Admin)
+		t.Execute(w, p)
+
+		// POST方法
+	} else if r.Method == "POST" {
+		r.ParseForm()
+		delete_pid := r.Form.Get("delete_pid")
+		add_full_grade := r.Form.Get("add_full_grade")
+		add_pname := r.Form.Get("add_pname")
+
+		// Add操作
+		if delete_pid == "" {
+			db.Exec("insert into project values(?,?,?)", nil, add_pname, add_full_grade)
+			// Delete操作
+		} else {
+			db.Exec("delete from project where pid = ?", delete_pid)
+		}
+
+		rows, err := db.Query("select * from project")
+		checkErr(err)
+		var rows_project []Project
+		for i := 0; rows.Next(); i++ {
+			rows_project = append(rows_project, Project{0, "", 0})
+			rows.Scan(&rows_project[i].Pid, &rows_project[i].Pname, &rows_project[i].Full_grade)
+			fmt.Println(rows_project[i].Pid, rows_project[i].Pname, rows_project[i].Full_grade)
+		}
+		p := &temp_Admin{Name: session_manager.GetSession(w, r).Value.(Session_struct).Name, Find_Project: rows_project}
+		t, _ := template.ParseFiles(Path_Admin)
+		t.Execute(w, p)
+	}
+
 }
 
 func main() {
