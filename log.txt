@@ -1,0 +1,18 @@
+2014/09/03 16:08:43 
+URL: /
+method: GET
+Addr: [::1]:14006
+=========================
+2014/09/03 16:08:49 
+URL: /
+method: POST
+Addr: [::1]:14006
+name: [azard5]
+password: bcab548eaf2d5f2cd3d41e07a3e679d5
+=========================
+2014/09/03 16:08:49 
+URL: /admin
+method: GET
+Addr: [::1]:14006
+=========================
+2014/09/03 16:13:50 Expired session(id:87cc0a01f55d01a41cafe17b33ded161)

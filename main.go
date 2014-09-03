@@ -108,11 +108,12 @@ type Session_struct struct {
 	Admin_flag bool
 }
 
-// log管理器和session管理器
-var logger *log.Logger = log.New(os.Stdout, "", log.Ldate|log.Ltime)
-var session_manager *session.SessionManager = session.NewSessionManager(logger)
 var db *sql.DB
-var err error
+var f, err = os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+
+// log管理器和session管理器
+var logger *log.Logger = log.New(f, "", log.Ldate|log.Ltime)
+var session_manager *session.SessionManager = session.NewSessionManager(logger)
 
 // 静态文件请求的统一handle函数
 func serveSingleFile(pattern string, filename string) {
@@ -151,6 +152,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		if aname != "" && tempPassword == apassword {
 			session_manager.GetSession(w, r).Value = Session_struct{Name: tempName, Admin_flag: true}
 			http.Redirect(w, r, "/admin", http.StatusFound)
+			logger.Printf("Admin Login, ID:%s\n", tempName)
 			return //http.Redirect会执行后面的代码，return保证安全
 		}
 
@@ -166,16 +168,19 @@ func login(w http.ResponseWriter, r *http.Request) {
 			if tempPassword == password { //登陆成功
 				session_manager.GetSession(w, r).Value = Session_struct{Name: tempName, Admin_flag: false}
 				http.Redirect(w, r, "/student", http.StatusFound)
+				logger.Printf("User Login, ID:%s\n", tempName)
 				return //http.Redirect会执行后面的代码，return保证安全
 			} else { //密码错误，登陆失败
 				t, _ := template.ParseFiles(Path_Login)
 				p := &tmp_Login{Id_not_exist: false, Password_error: true}
 				t.Execute(w, p)
+				logger.Printf("User Login fail, password wrong, ID:%s\n", tempName)
 			}
 		} else { // 无该用户名，登陆失败
 			t, _ := template.ParseFiles(Path_Login)
 			p := &tmp_Login{Id_not_exist: true, Password_error: false}
 			t.Execute(w, p)
+			logger.Printf("User Login fail, ID not exist\n")
 		}
 
 		// 登陆页面的GET方法
@@ -190,6 +195,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 // 登出操作的handle函数
 func logout(w http.ResponseWriter, r *http.Request) {
 	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
+	logger.Printf("Logout, ID:%s\n", session_manager.GetSession(w, r).Value.(Session_struct).Name)
 	session_manager.GetSession(w, r).Value = nil
 	http.Redirect(w, r, "/", http.StatusFound)
 	return
@@ -205,6 +211,7 @@ func student(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	client_session := session_manager.GetSession(w, r).Value.(Session_struct)
+	logger.Printf("Student search grade, ID: %s\n", client_session.Name)
 
 	rows, err := db.Query("select name,pname,score,full_grade,remark from user natural join grade natural join project where name = ?", client_session.Name)
 	checkErr(err)
@@ -248,12 +255,14 @@ func modify_password(w http.ResponseWriter, r *http.Request) {
 			p := &tmp_Modify_Password{Name: client_session.Name, Not_same: true, Not_form: false, Modify_success: false}
 			t, _ := template.ParseFiles(Path_Modify_Password)
 			t.Execute(w, p)
+			logger.Printf("Student modify password fail, 2 times not same, ID: %s\n", client_session.Name)
 
 			// 密码不符合规范
 		} else if len(tempPassword) < 4 || len(tempPassword) > 14 {
 			p := &tmp_Modify_Password{Name: client_session.Name, Not_same: false, Not_form: true, Modify_success: false}
 			t, _ := template.ParseFiles(Path_Modify_Password)
 			t.Execute(w, p)
+			logger.Printf("Student modify password fail, not format, ID: %s\n", client_session.Name)
 
 			// 可以修改密码
 		} else {
@@ -264,6 +273,7 @@ func modify_password(w http.ResponseWriter, r *http.Request) {
 			p := &tmp_Modify_Password{Name: client_session.Name, Not_same: false, Not_form: false, Modify_success: true}
 			t, _ := template.ParseFiles(Path_Modify_Password)
 			t.Execute(w, p)
+			logger.Printf("Student modify password success, ID: %s\n", client_session.Name)
 		}
 	}
 }
@@ -472,7 +482,7 @@ func main() {
 	// 	println("abandon")
 	// })
 
-	session_manager.SetTimeout(300)
+	session_manager.SetTimeout(1200)
 
 	http.HandleFunc("/", login)
 	http.HandleFunc("/student", student)
