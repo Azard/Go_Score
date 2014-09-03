@@ -1,8 +1,3 @@
-/*
-TODO:
-	登陆验证
-*/
-
 package main
 
 import (
@@ -458,29 +453,14 @@ func main() {
 	db, err = sql.Open("sqlite3", "./system.db")
 	checkErr(err)
 
-	//==================================
-
-	/*
-		stmt, db_err := db.Prepare("INSERT INTO user(id, name, password) values(?,?,?)")
-		checkErr(db_err)
-
-		res, db_err := stmt.Exec(nil, "bbb", "ccc")
-		checkErr(db_err)
-
-		id, db_err := res.LastInsertId()
-		checkErr(db_err)
-		fmt.Println(id)
-	*/
-	//==================================
-
 	fmt.Println("HTTP Server Start\n=========================")
 
 	session_manager.OnStart(func(session *session.Session) {
 		println("started new session")
 	})
-	// session_manager.OnEnd(func(session *session.Session) {
-	// 	println("abandon")
-	// })
+	session_manager.OnEnd(func(session *session.Session) {
+		println("session abandon")
+	})
 
 	session_manager.SetTimeout(1200)
 
