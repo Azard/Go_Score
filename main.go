@@ -113,7 +113,6 @@ var session_manager *session.SessionManager = session.NewSessionManager(logger)
 // 静态文件请求的统一handle函数
 func serveSingleFile(pattern string, filename string) {
 	http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
-		logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
 		http.ServeFile(w, r, filename)
 	})
 }
