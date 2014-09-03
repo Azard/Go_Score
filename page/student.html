@@ -29,7 +29,30 @@
 	</div>
 
 
+	<div class=container>
+		<h1 class="page-header">Grade</h1>
 
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Pname</th>
+					<th>Grade</th>
+					<th>Remark</th>
+			    </tr>
+			</thead>
+			<tbody>
+			{{with .Find_Grade}}
+				{{range .}}
+				<tr>
+					<td>{{.Pname}}</td>
+					<td>{{.Score}} / {{.Full_Grade}}</td>
+					<td>{{.Remark}}</td>
+			    </tr>
+			    {{end}}
+			{{end}}
+			</tbody>
+		</table>
+	</div>
 
 <p>hello, {{.Name}}</p>
 </body>

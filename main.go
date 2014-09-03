@@ -25,6 +25,7 @@ const (
 	Path_Student         string = "./page/student.html"
 	Path_Modify_Password string = "./page/modify-password.html"
 	Path_Admin           string = "./page/admin.html"
+	Path_Admin_Student   string = "./page/admin-student.html"
 
 	Path_bootstrap_css string = "./page/bootstrap/css/bootstrap.min.css"
 	Path_bootstrap_js  string = "./page/bootstrap/js/bootstrap.min.js"
@@ -56,10 +57,34 @@ type temp_Admin struct {
 	Find_Project []Project
 }
 
+type temp_Admin_Student struct {
+	Name         string
+	Find_Student []Student
+}
+
+type temp_Student_Grade struct {
+	Name       string
+	Find_Grade []Student_Grade
+}
+
 type Project struct {
 	Pid        int
 	Pname      string
 	Full_grade int
+}
+
+type Student struct {
+	Uid      int
+	Name     string
+	Password string
+}
+
+type Student_Grade struct {
+	Name       string
+	Pname      string
+	Score      int
+	Full_Grade int
+	Remark     string
 }
 
 type Session_struct struct {
@@ -164,7 +189,15 @@ func student(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	client_session := session_manager.GetSession(w, r).Value.(Session_struct)
-	p := &tmp_Student{Name: client_session.Name}
+
+	rows, err := db.Query("select name,pname,score,full_grade,remark from user natural join grade natural join project where name = ?", client_session.Name)
+	checkErr(err)
+	var rows_grade []Student_Grade
+	for i := 0; rows.Next(); i++ {
+		rows_grade = append(rows_grade, Student_Grade{"", "", 0, 0, ""})
+		rows.Scan(&rows_grade[i].Name, &rows_grade[i].Pname, &rows_grade[i].Score, &rows_grade[i].Full_Grade, &rows_grade[i].Remark)
+	}
+	p := &temp_Student_Grade{Name: client_session.Name, Find_Grade: rows_grade}
 	t, _ := template.ParseFiles(Path_Student)
 	t.Execute(w, p)
 }
@@ -219,6 +252,7 @@ func modify_password(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// admin操作projec页面
 func admin(w http.ResponseWriter, r *http.Request) {
 	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
 	// session没有记录，拒绝服务
@@ -230,17 +264,6 @@ func admin(w http.ResponseWriter, r *http.Request) {
 
 	// GET方法
 	if r.Method == "GET" {
-		rows, err := db.Query("select * from project")
-		checkErr(err)
-		var rows_project []Project
-		for i := 0; rows.Next(); i++ {
-			rows_project = append(rows_project, Project{0, "", 0})
-			rows.Scan(&rows_project[i].Pid, &rows_project[i].Pname, &rows_project[i].Full_grade)
-			fmt.Println(rows_project[i].Pid, rows_project[i].Pname, rows_project[i].Full_grade)
-		}
-		p := &temp_Admin{Name: session_manager.GetSession(w, r).Value.(Session_struct).Name, Find_Project: rows_project}
-		t, _ := template.ParseFiles(Path_Admin)
-		t.Execute(w, p)
 
 		// POST方法
 	} else if r.Method == "POST" {
@@ -257,19 +280,61 @@ func admin(w http.ResponseWriter, r *http.Request) {
 			db.Exec("delete from project where pid = ?", delete_pid)
 		}
 
-		rows, err := db.Query("select * from project")
-		checkErr(err)
-		var rows_project []Project
-		for i := 0; rows.Next(); i++ {
-			rows_project = append(rows_project, Project{0, "", 0})
-			rows.Scan(&rows_project[i].Pid, &rows_project[i].Pname, &rows_project[i].Full_grade)
-			fmt.Println(rows_project[i].Pid, rows_project[i].Pname, rows_project[i].Full_grade)
-		}
-		p := &temp_Admin{Name: session_manager.GetSession(w, r).Value.(Session_struct).Name, Find_Project: rows_project}
-		t, _ := template.ParseFiles(Path_Admin)
-		t.Execute(w, p)
+	}
+	rows, err := db.Query("select * from project")
+	checkErr(err)
+	var rows_project []Project
+	for i := 0; rows.Next(); i++ {
+		rows_project = append(rows_project, Project{0, "", 0})
+		rows.Scan(&rows_project[i].Pid, &rows_project[i].Pname, &rows_project[i].Full_grade)
+	}
+	p := &temp_Admin{Name: session_manager.GetSession(w, r).Value.(Session_struct).Name, Find_Project: rows_project}
+	t, _ := template.ParseFiles(Path_Admin)
+	t.Execute(w, p)
+
+}
+
+// admin操作student页面
+func admin_student(w http.ResponseWriter, r *http.Request) {
+	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
+	// session没有记录，拒绝服务
+	if session_manager.GetSession(w, r).Value == nil || session_manager.GetSession(w, r).Value.(Session_struct).Admin_flag != true {
+		logger.Println("session wrong, refuse")
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
 	}
 
+	// GET方法
+	if r.Method == "GET" {
+
+		// POST方法
+	} else if r.Method == "POST" {
+		r.ParseForm()
+		add_name := r.Form.Get("add_name")
+		add_password := r.Form.Get("add_password")
+		delete_uid := r.Form.Get("delete_uid")
+		modify_uid := r.Form.Get("modify_uid")
+		modify_password := r.Form.Get("modify_password")
+
+		if add_name != "" {
+			db.Exec("insert into user values(?,?,?)", nil, add_name, getMd5String(add_password))
+		} else if delete_uid != "" {
+			db.Exec("delete from user where uid = ?", delete_uid)
+		} else if modify_uid != "" {
+			db.Exec("update user set password = ? where uid = ?", getMd5String(modify_password), modify_uid)
+		}
+	}
+
+	rows, err := db.Query("select * from user")
+	checkErr(err)
+	var rows_student []Student
+	for i := 0; rows.Next(); i++ {
+		rows_student = append(rows_student, Student{0, "", ""})
+		rows.Scan(&rows_student[i].Uid, &rows_student[i].Name, &rows_student[i].Password)
+	}
+	p := &temp_Admin_Student{Name: session_manager.GetSession(w, r).Value.(Session_struct).Name, Find_Student: rows_student}
+	t, _ := template.ParseFiles(Path_Admin_Student)
+	t.Execute(w, p)
 }
 
 func main() {
@@ -278,16 +343,6 @@ func main() {
 	checkErr(err)
 
 	//==================================
-
-	/*
-		for rows.Next() {
-			var id int
-			var username string
-			var password string
-			rows.Scan(&id, &username, &password)
-			fmt.Println(id, username, password)
-		}
-	*/
 
 	/*
 		stmt, db_err := db.Prepare("INSERT INTO user(id, name, password) values(?,?,?)")
@@ -317,6 +372,7 @@ func main() {
 	http.HandleFunc("/student", student)
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/admin", admin)
+	http.HandleFunc("/admin-student", admin_student)
 	http.HandleFunc("/modify-password", modify_password)
 
 	serveSingleFile("/favicon.ico", Path_Favicon)

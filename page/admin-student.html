@@ -6,7 +6,7 @@
 <script src="bootstrap/jquery.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 
-<title>Admin Home Page</title>
+<title>Admin Student Page</title>
 </head>
 
 
@@ -18,9 +18,9 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="/admin">Project</a></li>
+					<li><a href="/admin">Project</a></li>
 					<li><a href="#">Grade</a></li>
-					<li><a href="admin-student">Student</a></li>
+					<li class="active"><a href="/admin-student">Student</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="/logout">Logout</a></li>
@@ -31,47 +31,57 @@
 
 
 	<div class=container>
-		<h1 class="page-header">Project List</h1>
+		<h1 class="page-header">Student List</h1>
 
-		<div class="col-lg-6">
+		<div class="col-lg-4">
 			<form class="form-inline center-block" method="post">
-				<label>Project name</label>
-				<input name="add_pname" type="text" class="form-control" placeholder="name" required="true"> <br/>
-				<label>Full Grade&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-				<input name="add_full_grade" type="text" class="form-control" placeholder="full grade" required="true">
+				<label>Name&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+				<input name="add_name" type="text" class="form-control" placeholder="name" required="true"> <br/>
+				<label>Password</label>
+				<input name="add_password" type="text" class="form-control" placeholder="password" required="true">
 				<br/>
 				<br/>
 				<button type="submit" class="btn btn-primary btn-block" style="max-width:150px">Add</button>
 			</form>
 		</div>
+		
+		<div class="col-lg-4">
+			<form class="form-inline center-block" method="post">
+				<label>Uid&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+				<input name="modify_uid" type="text" class="form-control" placeholder="number" required="true">
+				<label>New Password</label>
+				<input name="modify_password" type="text" class="form-control" placeholder="new password" required="true">
+				<br/><br/>
+				<button type="submit" class="btn btn-warning btn-block" style="max-width:150px">Modify</button>
+			</form>
+		</div>
 
-		<div class="col-lg-6">
+		<div class="col-lg-4">
 			<form class="form-inline center-block" method="post">
 				<label>Delete number</label>
-				<input name="delete_pid" type="text" class="form-control" placeholder="number" required="true">
+				<input name="delete_uid" type="text" class="form-control" placeholder="number" required="true">
 				<br/><br/><br/><br/>
 				<button type="submit" class="btn btn-danger btn-block" style="max-width:150px">Delete</button>
 			</form>
 		</div>
 
 
-		<br/>
 
 		<table class="table table-striped table-hover">
 		<thead>
 			<tr>
 				<th>#</th>
 				<th>Name</th>
-				<th>Full Grade</th>
+				<th>Password (md5 crypto)</th>
 		    </tr>
 		</thead>
 		<tbody>
-		{{with .Find_Project}}
+		{{with .Find_Student}}
 			{{range .}}
 			<tr>
-				<td>{{.Pid}}</td>
-				<td>{{.Pname}}</td>
-				<td>{{.Full_grade}}</td>
+				<td>{{.Uid}}</td>
+				<td>{{.Name}}</td>
+				<td>{{.Password}}</td>
 		    </tr>
 		    {{end}}
 		{{end}}
@@ -79,6 +89,7 @@
 		</table>
 
 	</div>
+
 
 </body>
 </html>
