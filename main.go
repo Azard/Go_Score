@@ -26,6 +26,7 @@ const (
 	Path_Modify_Password string = "./page/modify-password.html"
 	Path_Admin           string = "./page/admin.html"
 	Path_Admin_Student   string = "./page/admin-student.html"
+	Path_Admin_Grade     string = "./page/admin-grade.html"
 
 	Path_bootstrap_css string = "./page/bootstrap/css/bootstrap.min.css"
 	Path_bootstrap_js  string = "./page/bootstrap/js/bootstrap.min.js"
@@ -62,6 +63,14 @@ type temp_Admin_Student struct {
 	Find_Student []Student
 }
 
+type temp_Admin_Grade struct {
+	Name           string
+	Find_Project   []Project
+	Select_Project string
+	Find_Grade     []Admin_Grade
+	Not_Have_Grade []string
+}
+
 type temp_Student_Grade struct {
 	Name       string
 	Find_Grade []Student_Grade
@@ -77,6 +86,13 @@ type Student struct {
 	Uid      int
 	Name     string
 	Password string
+}
+
+type Admin_Grade struct {
+	Name       string
+	Score      int
+	Full_Grade int
+	Remark     string
 }
 
 type Student_Grade struct {
@@ -337,6 +353,96 @@ func admin_student(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, p)
 }
 
+// Admin打分界面
+func admin_grade(w http.ResponseWriter, r *http.Request) {
+	logger.Printf("\nURL: %s\nmethod: %s\nAddr: %s\n=========================", r.URL, r.Method, r.RemoteAddr)
+	// session没有记录，拒绝服务
+	if session_manager.GetSession(w, r).Value == nil || session_manager.GetSession(w, r).Value.(Session_struct).Admin_flag != true {
+		logger.Println("session wrong, refuse")
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+	client_session := session_manager.GetSession(w, r).Value.(Session_struct)
+	rows, err := db.Query("select * from project")
+	checkErr(err)
+	var rows_project []Project
+	for i := 0; rows.Next(); i++ {
+		rows_project = append(rows_project, Project{0, "", 0})
+		rows.Scan(&rows_project[i].Pid, &rows_project[i].Pname, &rows_project[i].Full_grade)
+	}
+
+	if r.Method == "GET" {
+		p := &temp_Admin_Grade{Name: client_session.Name, Find_Project: rows_project, Select_Project: "select a project"}
+		t, _ := template.ParseFiles(Path_Admin_Grade)
+		t.Execute(w, p)
+
+	} else if r.Method == "POST" {
+		r.ParseForm()
+		change_project := r.Form.Get("change_project")
+		update_project := r.Form.Get("update_project")
+		update_student_number := r.Form.Get("update_student_number")
+		update_grade := r.Form.Get("update_grade")
+		update_remark := r.Form.Get("update_remark")
+
+		// 修改了select project
+		if change_project != "" {
+			rows, err = db.Query("select name, score, full_grade, remark from user natural join project natural join grade where pname = ?", change_project)
+			checkErr(err)
+			var rows_grade []Admin_Grade
+			for i := 0; rows.Next(); i++ {
+				rows_grade = append(rows_grade, Admin_Grade{"", 0, 0, ""})
+				rows.Scan(&rows_grade[i].Name, &rows_grade[i].Score, &rows_grade[i].Full_Grade, &rows_grade[i].Remark)
+			}
+
+			rows, err = db.Query("select user.name from user except select user.name from user natural join grade natural join project where pname = ?", change_project)
+			checkErr(err)
+			var rows_not_have_grade []string
+			for i := 0; rows.Next(); i++ {
+				rows_not_have_grade = append(rows_not_have_grade, "")
+				rows.Scan(&rows_not_have_grade[i])
+			}
+
+			p := &temp_Admin_Grade{Name: client_session.Name, Find_Project: rows_project, Select_Project: change_project, Find_Grade: rows_grade, Not_Have_Grade: rows_not_have_grade}
+			t, _ := template.ParseFiles(Path_Admin_Grade)
+			t.Execute(w, p)
+
+			// 修改分数
+		} else {
+			row := db.QueryRow("select uid from user where name = ?", update_student_number)
+			var ttemp_uid int
+			row.Scan(&ttemp_uid)
+
+			row = db.QueryRow("select pid from project where pname = ?", update_project)
+			var ttemp_pid int
+			row.Scan(&ttemp_pid)
+
+			db.Exec("delete from grade where uid = ? and pid = ?", ttemp_uid, ttemp_pid)
+			db.Exec("insert into grade values(?,?,?,?)", ttemp_uid, ttemp_pid, update_grade, update_remark)
+
+			rows, err = db.Query("select name, score, full_grade, remark from user natural join project natural join grade where pname = ?", update_project)
+			checkErr(err)
+			var rows_grade []Admin_Grade
+			for i := 0; rows.Next(); i++ {
+				rows_grade = append(rows_grade, Admin_Grade{"", 0, 0, ""})
+				rows.Scan(&rows_grade[i].Name, &rows_grade[i].Score, &rows_grade[i].Full_Grade, &rows_grade[i].Remark)
+			}
+
+			rows, err = db.Query("select user.name from user except select user.name from user natural join grade natural join project where pname = ?", update_project)
+			checkErr(err)
+			var rows_not_have_grade []string
+			for i := 0; rows.Next(); i++ {
+				rows_not_have_grade = append(rows_not_have_grade, "")
+				rows.Scan(&rows_not_have_grade[i])
+			}
+
+			p := &temp_Admin_Grade{Name: client_session.Name, Find_Project: rows_project, Select_Project: update_project, Find_Grade: rows_grade, Not_Have_Grade: rows_not_have_grade}
+			t, _ := template.ParseFiles(Path_Admin_Grade)
+			t.Execute(w, p)
+		}
+	}
+
+}
+
 func main() {
 	//连接数据库
 	db, err = sql.Open("sqlite3", "./system.db")
@@ -373,6 +479,7 @@ func main() {
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/admin", admin)
 	http.HandleFunc("/admin-student", admin_student)
+	http.HandleFunc("/admin-grade", admin_grade)
 	http.HandleFunc("/modify-password", modify_password)
 
 	serveSingleFile("/favicon.ico", Path_Favicon)
