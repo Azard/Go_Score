@@ -656,3 +656,143 @@ URL: /
 method: GET
 Addr: [::1]:15259
 =========================
+2014/09/03 19:41:05 
+URL: /
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:09 
+URL: /
+method: POST
+Addr: [::1]:23820
+name: [azard5]
+password: bcab548eaf2d5f2cd3d41e07a3e679d5
+=========================
+2014/09/03 19:41:09 Admin Login, ID:azard5
+2014/09/03 19:41:09 
+URL: /admin
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:10 
+URL: /admin-grade
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:11 
+URL: /admin-student
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:11 
+URL: /admin
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:12 
+URL: /admin
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:13 
+URL: /admin-grade
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:13 
+URL: /admin-student
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:13 
+URL: /admin
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:14 
+URL: /logout
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:14 Logout, ID:azard5
+2014/09/03 19:41:14 
+URL: /
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:16 
+URL: /
+method: POST
+Addr: [::1]:23820
+name: [admin]
+password: 21232f297a57a5a743894a0e4a801fc3
+=========================
+2014/09/03 19:41:16 User Login, ID:admin
+2014/09/03 19:41:16 
+URL: /student
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:16 Student search grade, ID: admin
+2014/09/03 19:41:17 
+URL: /student
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:17 Student search grade, ID: admin
+2014/09/03 19:41:18 
+URL: /student
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:18 Student search grade, ID: admin
+2014/09/03 19:41:20 
+URL: /modify-password
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:21 
+URL: /student
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:21 Student search grade, ID: admin
+2014/09/03 19:41:22 
+URL: /modify-password
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:23 
+URL: /logout
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:23 Logout, ID:admin
+2014/09/03 19:41:23 
+URL: /
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:26 
+URL: /
+method: POST
+Addr: [::1]:23820
+name: [azard5]
+password: bcab548eaf2d5f2cd3d41e07a3e679d5
+=========================
+2014/09/03 19:41:26 Admin Login, ID:azard5
+2014/09/03 19:41:26 
+URL: /admin
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:27 
+URL: /admin-grade
+method: GET
+Addr: [::1]:23820
+=========================
+2014/09/03 19:41:27 
+URL: /admin-student
+method: GET
+Addr: [::1]:23820
+=========================
